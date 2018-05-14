@@ -613,10 +613,24 @@
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     
+    AbstractAsset *asset = self.abstractAssetsArray[indexPath.item];
+    
+    if (asset.isDownloading) {
+        return NO;
+    }
+    
+    if (asset.isProcessing) {
+        return NO;
+    }
+    
+    if (!asset.assetURL) {
+        return NO;
+    }
+    
     if ([self.imagePickerController.delegate respondsToSelector:@selector(qb_imagePickerController:shouldSelectFileAsset:)]) {
-        AbstractAsset *asset = self.abstractAssetsArray[indexPath.item];
         return [self.imagePickerController.delegate qb_imagePickerController:self.imagePickerController shouldSelectFileAsset:asset];
     }
+    
     
     if ([self isAutoDeselectEnabled]) {
         return YES;
