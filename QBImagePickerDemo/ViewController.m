@@ -31,6 +31,28 @@
     imagePickerController.allowsMultipleSelection = (indexPath.section == 1);
     imagePickerController.showsNumberOfSelectedAssets = YES;
     
+    
+        // load image files at URL
+    NSMutableArray *array = [NSMutableArray array];
+    NSURL *image1 = [[NSBundle mainBundle] URLForResource:@"image1" withExtension:@"jpg"];
+    AbstractAsset *asset1 = [[AbstractAsset alloc] init];
+    asset1.assetURL = image1;
+    
+    NSURL *image2 = [[NSBundle mainBundle] URLForResource:@"image2" withExtension:@"jpg"];
+    AbstractAsset *asset2 = [[AbstractAsset alloc] init];
+    asset2.assetURL = image2;
+    
+    NSURL *image3 = [[NSBundle mainBundle] URLForResource:@"image3" withExtension:@"jpg"];
+    AbstractAsset *asset3 = [[AbstractAsset alloc] init];
+    asset3.assetURL = image3;
+    
+    [array addObject: asset1];
+    [array addObject: asset2];
+    [array addObject: asset3];
+    imagePickerController.abstractAssetArray = array;
+
+    
+    
     if (indexPath.section == 1) {
         switch (indexPath.row) {
             case 1:
@@ -56,7 +78,9 @@
         }
     }
     
-    [self presentViewController:imagePickerController animated:YES completion:NULL];
+    [self presentViewController: imagePickerController
+                       animated: YES
+                     completion: NULL];
 }
 
 

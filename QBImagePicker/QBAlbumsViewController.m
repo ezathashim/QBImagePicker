@@ -15,6 +15,7 @@
 // ViewControllers
 #import "QBImagePickerController.h"
 #import "QBAssetsViewController.h"
+#import "NPAssetsViewController.h"
 
 static CGSize CGSizeScale(CGSize size, CGFloat scale) {
     return CGSizeMake(size.width * scale, size.height * scale);
@@ -82,11 +83,64 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
 
 #pragma mark - Storyboard
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    QBAssetsViewController *assetsViewController = segue.destinationViewController;
-    assetsViewController.imagePickerController = self.imagePickerController;
-    assetsViewController.assetCollection = self.assetCollections[self.tableView.indexPathForSelectedRow.row];
+    id assetCollection = self.assetCollections[self.tableView.indexPathForSelectedRow.row];
+    
+    if ([assetCollection isKindOfClass: [PHAssetCollection class]]) {
+        
+        QBAssetsViewController *assetsViewController = [self.storyboard instantiateViewControllerWithIdentifier: @"QBAssetsViewController"];
+        
+        assetsViewController.imagePickerController = self.imagePickerController;
+        assetsViewController.assetCollection = assetCollection;
+        
+        [self.navigationController pushViewController: assetsViewController
+                                             animated: YES];
+        
+        return;
+        
+    }
+    
+    if ([assetCollection isKindOfClass: [NSArray class]]) {
+        
+            // a bunch if AbstractAsset objects
+        NPAssetsViewController *assetsViewController = [self.storyboard instantiateViewControllerWithIdentifier: @"NPAssetsViewController"];
+        
+        assetsViewController.imagePickerController = self.imagePickerController;
+        
+        assetsViewController.abstractAssetsArray = assetCollection;
+        
+        [self.navigationController pushViewController: assetsViewController
+                                             animated: YES];
+        
+        return;
+    }
+    
+}
+
+
+- (void)prepareForSegue: (UIStoryboardSegue *)segue
+                 sender: (id)sender
+{
+    id assetCollection = self.assetCollections[self.tableView.indexPathForSelectedRow.row];
+    
+    if ([assetCollection isKindOfClass: [PHAssetCollection class]]) {
+        
+        QBAssetsViewController *assetsViewController = segue.destinationViewController;
+        assetsViewController.imagePickerController = self.imagePickerController;
+        assetsViewController.assetCollection = assetCollection;
+    }
+    
+    if ([assetCollection isKindOfClass: [NSArray class]]) {
+        
+            // a bunch if URLs
+        NPAssetsViewController *assetsViewController = segue.destinationViewController;
+        assetsViewController.imagePickerController = self.imagePickerController;
+        
+        assetsViewController.abstractAssetsArray = assetCollection;
+    }
+    
+    
 }
 
 
@@ -187,6 +241,13 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
         [assetCollections addObject:assetCollection];
     }];
     
+    
+    // add AbstractAssets assets
+    if (self.imagePickerController.abstractAssetArray.lastObject) {
+        [assetCollections addObject: self.imagePickerController.abstractAssetArray];
+    }
+    
+    
     self.assetCollections = assetCollections;
 }
 
@@ -267,6 +328,12 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
     return 1;
 }
 
+
+- (nullable NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return @"";
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return self.assetCollections.count;
@@ -278,87 +345,160 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
     cell.tag = indexPath.row;
     cell.borderWidth = 1.0 / [[UIScreen mainScreen] scale];
     
+    
     // Thumbnail
-    PHAssetCollection *assetCollection = self.assetCollections[indexPath.row];
     
-    PHFetchOptions *options = [PHFetchOptions new];
+    // get assetCollection
+    id collectionObj = self.assetCollections[indexPath.row];
     
-    switch (self.imagePickerController.mediaType) {
-        case QBImagePickerMediaTypeImage:
-            options.predicate = [NSPredicate predicateWithFormat:@"mediaType == %ld", PHAssetMediaTypeImage];
-            break;
+    if ([collectionObj isKindOfClass: [PHAssetCollection class]]) {
+        
+        PHAssetCollection *assetCollection = (PHAssetCollection *)collectionObj;
+        
+        PHFetchOptions *options = [PHFetchOptions new];
+        
+        switch (self.imagePickerController.mediaType) {
+            case QBImagePickerMediaTypeImage:
+                options.predicate = [NSPredicate predicateWithFormat:@"mediaType == %ld", PHAssetMediaTypeImage];
+                break;
+                
+            case QBImagePickerMediaTypeVideo:
+                options.predicate = [NSPredicate predicateWithFormat:@"mediaType == %ld", PHAssetMediaTypeVideo];
+                break;
+                
+            default:
+                break;
+        }
+        
+        PHFetchResult *fetchResult = [PHAsset fetchAssetsInAssetCollection:assetCollection options:options];
+        PHImageManager *imageManager = [PHImageManager defaultManager];
+        
+        if (fetchResult.count >= 3) {
+            cell.imageView3.hidden = NO;
             
-        case QBImagePickerMediaTypeVideo:
-            options.predicate = [NSPredicate predicateWithFormat:@"mediaType == %ld", PHAssetMediaTypeVideo];
-            break;
+            [imageManager requestImageForAsset:fetchResult[fetchResult.count - 3]
+                                    targetSize:CGSizeScale(cell.imageView3.frame.size, [[UIScreen mainScreen] scale])
+                                   contentMode:PHImageContentModeAspectFill
+                                       options:nil
+                                 resultHandler:^(UIImage *result, NSDictionary *info) {
+                                     if (cell.tag == indexPath.row) {
+                                         cell.imageView3.image = result;
+                                     }
+                                 }];
+        } else {
+            cell.imageView3.hidden = YES;
+        }
+        
+        if (fetchResult.count >= 2) {
+            cell.imageView2.hidden = NO;
             
-        default:
-            break;
-    }
-    
-    PHFetchResult *fetchResult = [PHAsset fetchAssetsInAssetCollection:assetCollection options:options];
-    PHImageManager *imageManager = [PHImageManager defaultManager];
-    
-    if (fetchResult.count >= 3) {
-        cell.imageView3.hidden = NO;
+            [imageManager requestImageForAsset:fetchResult[fetchResult.count - 2]
+                                    targetSize:CGSizeScale(cell.imageView2.frame.size, [[UIScreen mainScreen] scale])
+                                   contentMode:PHImageContentModeAspectFill
+                                       options:nil
+                                 resultHandler:^(UIImage *result, NSDictionary *info) {
+                                     if (cell.tag == indexPath.row) {
+                                         cell.imageView2.image = result;
+                                     }
+                                 }];
+        } else {
+            cell.imageView2.hidden = YES;
+        }
         
-        [imageManager requestImageForAsset:fetchResult[fetchResult.count - 3]
-                                targetSize:CGSizeScale(cell.imageView3.frame.size, [[UIScreen mainScreen] scale])
-                               contentMode:PHImageContentModeAspectFill
-                                   options:nil
-                             resultHandler:^(UIImage *result, NSDictionary *info) {
-                                 if (cell.tag == indexPath.row) {
-                                     cell.imageView3.image = result;
-                                 }
-                             }];
-    } else {
-        cell.imageView3.hidden = YES;
-    }
-    
-    if (fetchResult.count >= 2) {
-        cell.imageView2.hidden = NO;
+        if (fetchResult.count >= 1) {
+            [imageManager requestImageForAsset:fetchResult[fetchResult.count - 1]
+                                    targetSize:CGSizeScale(cell.imageView1.frame.size, [[UIScreen mainScreen] scale])
+                                   contentMode:PHImageContentModeAspectFill
+                                       options:nil
+                                 resultHandler:^(UIImage *result, NSDictionary *info) {
+                                     if (cell.tag == indexPath.row) {
+                                         cell.imageView1.image = result;
+                                     }
+                                 }];
+        }
         
-        [imageManager requestImageForAsset:fetchResult[fetchResult.count - 2]
-                                targetSize:CGSizeScale(cell.imageView2.frame.size, [[UIScreen mainScreen] scale])
-                               contentMode:PHImageContentModeAspectFill
-                                   options:nil
-                             resultHandler:^(UIImage *result, NSDictionary *info) {
-                                 if (cell.tag == indexPath.row) {
-                                     cell.imageView2.image = result;
-                                 }
-                             }];
-    } else {
-        cell.imageView2.hidden = YES;
-    }
-    
-    if (fetchResult.count >= 1) {
-        [imageManager requestImageForAsset:fetchResult[fetchResult.count - 1]
-                                targetSize:CGSizeScale(cell.imageView1.frame.size, [[UIScreen mainScreen] scale])
-                               contentMode:PHImageContentModeAspectFill
-                                   options:nil
-                             resultHandler:^(UIImage *result, NSDictionary *info) {
-                                 if (cell.tag == indexPath.row) {
-                                     cell.imageView1.image = result;
-                                 }
-                             }];
-    }
-    
-    if (fetchResult.count == 0) {
-        cell.imageView3.hidden = NO;
-        cell.imageView2.hidden = NO;
+        if (fetchResult.count == 0) {
+            cell.imageView3.hidden = NO;
+            cell.imageView2.hidden = NO;
+            
+                // Set placeholder image
+            UIImage *placeholderImage = [self placeholderImageWithSize:cell.imageView1.frame.size];
+            cell.imageView1.image = placeholderImage;
+            cell.imageView2.image = placeholderImage;
+            cell.imageView3.image = placeholderImage;
+        }
         
-        // Set placeholder image
-        UIImage *placeholderImage = [self placeholderImageWithSize:cell.imageView1.frame.size];
-        cell.imageView1.image = placeholderImage;
-        cell.imageView2.image = placeholderImage;
-        cell.imageView3.image = placeholderImage;
+            // Album title
+        cell.titleLabel.text = assetCollection.localizedTitle;
+        
+            // Number of photos
+        cell.countLabel.text = [NSString stringWithFormat:@"%lu", (long)fetchResult.count];
+        
+        
     }
     
-    // Album title
-    cell.titleLabel.text = assetCollection.localizedTitle;
     
-    // Number of photos
-    cell.countLabel.text = [NSString stringWithFormat:@"%lu", (long)fetchResult.count];
+    if ([collectionObj isKindOfClass: [NSArray class]]) {
+        
+            // is a bunch of AbstractAsset objects
+        NSArray *abstractAssetsArray = (NSArray *)collectionObj;
+        
+            // use images
+        if (abstractAssetsArray.count >= 3) {
+            cell.imageView3.hidden = NO;
+            
+            AbstractAsset *asset = [abstractAssetsArray objectAtIndex: (abstractAssetsArray.count - 3)];
+            cell.imageView3.image = asset.image;
+            
+        } else {
+            cell.imageView3.hidden = YES;
+        }
+        
+        
+        
+        if (abstractAssetsArray.count >= 2) {
+            cell.imageView3.hidden = NO;
+            
+            AbstractAsset *asset = [abstractAssetsArray objectAtIndex: (abstractAssetsArray.count - 2)];
+            cell.imageView2.image = asset.image;
+            
+        } else {
+            cell.imageView2.hidden = YES;
+        }
+        
+        if (abstractAssetsArray.count >= 1) {
+            cell.imageView3.hidden = NO;
+            
+            AbstractAsset *asset = [abstractAssetsArray objectAtIndex: (abstractAssetsArray.count - 1)];
+            cell.imageView1.image = asset.image;
+            
+        } else {
+            cell.imageView1.hidden = YES;
+        }
+        
+        
+        if (abstractAssetsArray.count == 0) {
+            cell.imageView3.hidden = NO;
+            cell.imageView2.hidden = NO;
+            
+                // Set placeholder image
+            UIImage *placeholderImage = [self placeholderImageWithSize:cell.imageView1.frame.size];
+            cell.imageView1.image = placeholderImage;
+            cell.imageView2.image = placeholderImage;
+            cell.imageView3.image = placeholderImage;
+        }
+        
+        
+            // Album title
+        cell.titleLabel.text = @"Patient Media";
+        
+            // Number of photos
+        cell.countLabel.text = [NSString stringWithFormat:@"%lu", (long)abstractAssetsArray.count];
+        
+    }
+    
+    
+    
     
     return cell;
 }

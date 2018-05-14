@@ -38,6 +38,17 @@
 		AAF1CA301ACE6E46005F6295 /* QBAssetsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AAF1CA2E1ACE6E46005F6295 /* QBAssetsViewController.m */; };
 		AAF1CA331ACE6FB5005F6295 /* QBAssetCell.h in Headers */ = {isa = PBXBuildFile; fileRef = AAF1CA311ACE6FB5005F6295 /* QBAssetCell.h */; };
 		AAF1CA341ACE6FB5005F6295 /* QBAssetCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AAF1CA321ACE6FB5005F6295 /* QBAssetCell.m */; };
+		AE78837C20A9B3C500804B33 /* DAProgressOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = AE78837A20A9B3C500804B33 /* DAProgressOverlayView.m */; };
+		AE78837D20A9B3C500804B33 /* DAProgressOverlayView.h in Headers */ = {isa = PBXBuildFile; fileRef = AE78837B20A9B3C500804B33 /* DAProgressOverlayView.h */; };
+		AE78838020A9B52D00804B33 /* AbstractAssetCell.h in Headers */ = {isa = PBXBuildFile; fileRef = AE78837E20A9B52D00804B33 /* AbstractAssetCell.h */; };
+		AE78838120A9B52D00804B33 /* AbstractAssetCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AE78837F20A9B52D00804B33 /* AbstractAssetCell.m */; };
+		AEBC5EDC20A1D91900E83BFD /* NPAssetsViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = AEBC5EDB20A1D91900E83BFD /* NPAssetsViewController.h */; };
+		AEBC5EDE20A1D92C00E83BFD /* NPAssetsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AEBC5EDD20A1D92C00E83BFD /* NPAssetsViewController.m */; };
+		AEBC5EE220A22DDE00E83BFD /* image2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AEBC5EDF20A22DDE00E83BFD /* image2.jpg */; };
+		AEBC5EE320A22DDE00E83BFD /* image3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AEBC5EE020A22DDE00E83BFD /* image3.jpg */; };
+		AEBC5EE420A22DDE00E83BFD /* image1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AEBC5EE120A22DDE00E83BFD /* image1.jpg */; };
+		AEBC5EE920A4F73500E83BFD /* AbstractAsset.h in Headers */ = {isa = PBXBuildFile; fileRef = AEBC5EE720A4F73500E83BFD /* AbstractAsset.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AEBC5EEA20A4F73500E83BFD /* AbstractAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = AEBC5EE820A4F73500E83BFD /* AbstractAsset.m */; };
 		E521B0A21B01D9300079461F /* QBImagePicker.strings in Resources */ = {isa = PBXBuildFile; fileRef = AAF1CA3F1ACE8918005F6295 /* QBImagePicker.strings */; };
 /* End PBXBuildFile section */
 
@@ -122,6 +133,17 @@
 		AAF1CA321ACE6FB5005F6295 /* QBAssetCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QBAssetCell.m; sourceTree = "<group>"; };
 		AAF1CA3E1ACE8918005F6295 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/QBImagePicker.strings; sourceTree = "<group>"; };
 		AAF1CA401ACE8A8B005F6295 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/QBImagePicker.strings; sourceTree = "<group>"; };
+		AE78837A20A9B3C500804B33 /* DAProgressOverlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DAProgressOverlayView.m; sourceTree = "<group>"; };
+		AE78837B20A9B3C500804B33 /* DAProgressOverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DAProgressOverlayView.h; sourceTree = "<group>"; };
+		AE78837E20A9B52D00804B33 /* AbstractAssetCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AbstractAssetCell.h; sourceTree = "<group>"; };
+		AE78837F20A9B52D00804B33 /* AbstractAssetCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AbstractAssetCell.m; sourceTree = "<group>"; };
+		AEBC5EDB20A1D91900E83BFD /* NPAssetsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NPAssetsViewController.h; sourceTree = "<group>"; };
+		AEBC5EDD20A1D92C00E83BFD /* NPAssetsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NPAssetsViewController.m; sourceTree = "<group>"; };
+		AEBC5EDF20A22DDE00E83BFD /* image2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = image2.jpg; sourceTree = "<group>"; };
+		AEBC5EE020A22DDE00E83BFD /* image3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = image3.jpg; sourceTree = "<group>"; };
+		AEBC5EE120A22DDE00E83BFD /* image1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = image1.jpg; sourceTree = "<group>"; };
+		AEBC5EE720A4F73500E83BFD /* AbstractAsset.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AbstractAsset.h; sourceTree = "<group>"; };
+		AEBC5EE820A4F73500E83BFD /* AbstractAsset.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AbstractAsset.m; sourceTree = "<group>"; };
 		E521B0A11B01D6810079461F /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/QBImagePicker.strings"; sourceTree = "<group>"; };
 		F167DB441C086AB90045AD5B /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/QBImagePicker.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -165,6 +187,8 @@
 			children = (
 				AAF1CA181ACE5467005F6295 /* QBAlbumCell.h */,
 				AAF1CA191ACE5467005F6295 /* QBAlbumCell.m */,
+				AE78837B20A9B3C500804B33 /* DAProgressOverlayView.h */,
+				AE78837A20A9B3C500804B33 /* DAProgressOverlayView.m */,
 				AAF1CA311ACE6FB5005F6295 /* QBAssetCell.h */,
 				AAF1CA321ACE6FB5005F6295 /* QBAssetCell.m */,
 				AABBF08E1ACEDDFF003188A3 /* QBCheckmarkView.h */,
@@ -188,6 +212,12 @@
 				AAA8FE5A1ACDA554002A9710 /* QBAlbumsViewController.m */,
 				AAF1CA2D1ACE6E46005F6295 /* QBAssetsViewController.h */,
 				AAF1CA2E1ACE6E46005F6295 /* QBAssetsViewController.m */,
+				AEBC5EDB20A1D91900E83BFD /* NPAssetsViewController.h */,
+				AEBC5EDD20A1D92C00E83BFD /* NPAssetsViewController.m */,
+				AEBC5EE720A4F73500E83BFD /* AbstractAsset.h */,
+				AEBC5EE820A4F73500E83BFD /* AbstractAsset.m */,
+				AE78837E20A9B52D00804B33 /* AbstractAssetCell.h */,
+				AE78837F20A9B52D00804B33 /* AbstractAssetCell.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -258,6 +288,9 @@
 				AAA8FE2E1ACDA0CE002A9710 /* AppDelegate.m */,
 				AAA8FE301ACDA0CE002A9710 /* ViewController.h */,
 				AAA8FE311ACDA0CE002A9710 /* ViewController.m */,
+				AEBC5EE120A22DDE00E83BFD /* image1.jpg */,
+				AEBC5EDF20A22DDE00E83BFD /* image2.jpg */,
+				AEBC5EE020A22DDE00E83BFD /* image3.jpg */,
 				AAA8FE4D1ACDA0D7002A9710 /* Resources */,
 				AAA8FE291ACDA0CE002A9710 /* Supporting Files */,
 			);
@@ -316,12 +349,16 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AE78837D20A9B3C500804B33 /* DAProgressOverlayView.h in Headers */,
 				790A850F1AE7D4D9008E2A80 /* QBSlomoIconView.h in Headers */,
+				AEBC5EE920A4F73500E83BFD /* AbstractAsset.h in Headers */,
 				AA3AD0731ACFA06700BF523E /* QBVideoIndicatorView.h in Headers */,
+				AEBC5EDC20A1D91900E83BFD /* NPAssetsViewController.h in Headers */,
 				AAF1CA331ACE6FB5005F6295 /* QBAssetCell.h in Headers */,
 				AAF1CA2F1ACE6E46005F6295 /* QBAssetsViewController.h in Headers */,
 				AAF1CA1A1ACE5467005F6295 /* QBAlbumCell.h in Headers */,
 				AAA8FE5B1ACDA554002A9710 /* QBAlbumsViewController.h in Headers */,
+				AE78838020A9B52D00804B33 /* AbstractAssetCell.h in Headers */,
 				AA3AD06F1ACF9A3A00BF523E /* QBVideoIconView.h in Headers */,
 				AAA8FE091ACDA079002A9710 /* QBImagePicker.h in Headers */,
 				AABBF0901ACEDDFF003188A3 /* QBCheckmarkView.h in Headers */,
@@ -411,7 +448,7 @@
 		AAA8FDFA1ACDA079002A9710 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0710;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Katsuma Tanaka";
 				TargetAttributes = {
 					AAA8FE021ACDA079002A9710 = {
@@ -477,8 +514,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				AAA8FE351ACDA0CE002A9710 /* Main.storyboard in Resources */,
+				AEBC5EE320A22DDE00E83BFD /* image3.jpg in Resources */,
 				AAA8FE3A1ACDA0CE002A9710 /* LaunchScreen.xib in Resources */,
+				AEBC5EE220A22DDE00E83BFD /* image2.jpg in Resources */,
 				AAA8FE371ACDA0CE002A9710 /* Images.xcassets in Resources */,
+				AEBC5EE420A22DDE00E83BFD /* image1.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -496,8 +536,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AEBC5EEA20A4F73500E83BFD /* AbstractAsset.m in Sources */,
+				AE78837C20A9B3C500804B33 /* DAProgressOverlayView.m in Sources */,
 				AAF1CA341ACE6FB5005F6295 /* QBAssetCell.m in Sources */,
 				AA3AD0701ACF9A3A00BF523E /* QBVideoIconView.m in Sources */,
+				AE78838120A9B52D00804B33 /* AbstractAssetCell.m in Sources */,
 				790A85101AE7D4D9008E2A80 /* QBSlomoIconView.m in Sources */,
 				AABBF0911ACEDDFF003188A3 /* QBCheckmarkView.m in Sources */,
 				AAF1CA301ACE6E46005F6295 /* QBAssetsViewController.m in Sources */,
@@ -505,6 +548,7 @@
 				AAA8FE221ACDA090002A9710 /* QBImagePickerController.m in Sources */,
 				AA3AD0741ACFA06700BF523E /* QBVideoIndicatorView.m in Sources */,
 				AAA8FE5C1ACDA554002A9710 /* QBAlbumsViewController.m in Sources */,
+				AEBC5EDE20A1D92C00E83BFD /* NPAssetsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -591,17 +635,28 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -612,6 +667,7 @@
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -639,17 +695,28 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -659,6 +726,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -679,6 +747,7 @@
 		AAA8FE1A1ACDA079002A9710 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -695,6 +764,7 @@
 		AAA8FE1B1ACDA079002A9710 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;

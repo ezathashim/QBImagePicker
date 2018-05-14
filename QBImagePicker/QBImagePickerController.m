@@ -9,6 +9,7 @@
 #import "QBImagePickerController.h"
 #import <Photos/Photos.h>
 
+
 // ViewControllers
 #import "QBAlbumsViewController.h"
 
@@ -57,6 +58,23 @@
     
     return self;
 }
+
+
+- (void)setAbstractAssetArray:(NSMutableArray *)abstractAssetArray
+{
+    NSMutableArray *array = [NSMutableArray array];
+    
+    for (id obj in abstractAssetArray){
+        if ([obj isKindOfClass: [AbstractAsset class]]) {
+            [array addObject: obj];
+        }
+    }
+    
+    _abstractAssetArray = array;
+    
+}
+
+
 
 - (void)setUpAlbumsViewController
 {

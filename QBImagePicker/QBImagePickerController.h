@@ -9,17 +9,30 @@
 #import <UIKit/UIKit.h>
 #import <Photos/Photos.h>
 
+#import "AbstractAsset.h"
+
+
 @class QBImagePickerController;
 
 @protocol QBImagePickerControllerDelegate <NSObject>
 
 @optional
+
+    // can be PHAsset or file URL
 - (void)qb_imagePickerController:(QBImagePickerController *)imagePickerController didFinishPickingAssets:(NSArray *)assets;
+
 - (void)qb_imagePickerControllerDidCancel:(QBImagePickerController *)imagePickerController;
 
 - (BOOL)qb_imagePickerController:(QBImagePickerController *)imagePickerController shouldSelectAsset:(PHAsset *)asset;
 - (void)qb_imagePickerController:(QBImagePickerController *)imagePickerController didSelectAsset:(PHAsset *)asset;
 - (void)qb_imagePickerController:(QBImagePickerController *)imagePickerController didDeselectAsset:(PHAsset *)asset;
+
+
+    // for AbstractAsset
+- (BOOL)qb_imagePickerController:(QBImagePickerController *)imagePickerController shouldSelectFileAsset:(AbstractAsset *)asset;
+- (void)qb_imagePickerController:(QBImagePickerController *)imagePickerController didSelectFileAsset:(AbstractAsset *)asset;
+- (void)qb_imagePickerController:(QBImagePickerController *)imagePickerController didDeselectFileAsset:(AbstractAsset *)asset;
+
 
 @end
 
@@ -47,5 +60,10 @@ typedef NS_ENUM(NSUInteger, QBImagePickerMediaType) {
 
 @property (nonatomic, assign) NSUInteger numberOfColumnsInPortrait;
 @property (nonatomic, assign) NSUInteger numberOfColumnsInLandscape;
+
+
+    // will only accept AbstractAsset and subclasses
+@property (nonatomic, strong) NSMutableArray *abstractAssetArray;
+
 
 @end
