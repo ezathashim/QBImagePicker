@@ -490,7 +490,7 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
         
         
             // Album title
-        cell.titleLabel.text = @"Patient Media";
+        cell.titleLabel.text = self.imagePickerController.abstractAssetArrayTitle;
         
             // Number of photos
         cell.countLabel.text = [NSString stringWithFormat:@"%lu", (long)abstractAssetsArray.count];

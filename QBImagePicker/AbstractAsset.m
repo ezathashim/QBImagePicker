@@ -37,6 +37,8 @@
         _isImageFile = NO;
         _isVideoFile = NO;
         
+        _targetImageSize = CGSizeMake(100, 100);
+        
     }
     
     
@@ -45,35 +47,52 @@
 }
 
 
-
-- (void)setAssetURL:(NSURL *)assetURL
+- (void)setTargetImageSize:(CGSize)targetImageSize
 {
-    _assetURL = assetURL;
+    _targetImageSize = targetImageSize;
     
-    if (!assetURL) {
-            // set the image to default or nil
+    // subclasses can start generating a new cache based on this size
+}
+
+
+
+- (void)updateImageCache
+{
+    if (!self.assetURL) {
         self.image = nil;
-        
-        self.isImageFile = NO;
-        self.isVideoFile = NO;
-    
-    } else {
-        
-        self.isImageFile = [[self class] isImageAsset: assetURL];
-        self.isVideoFile = [[self class] isMovieAsset: assetURL];
-        
-        self.image = [UIImage imageWithContentsOfFile: assetURL.path];
-        
-        if (!self.image) {
-            
-                // default to system icon when cannot make image
-            
-            UIDocumentInteractionController *documentInteractionController = [UIDocumentInteractionController interactionControllerWithURL: assetURL];
-            NSArray *systemIconImages = documentInteractionController.icons;
-            
-            self.image = [systemIconImages firstObject];
-        }
+        return;
     }
+    
+    UIImage *newImage = [UIImage imageWithContentsOfFile: self.assetURL.path];
+    
+    if (!newImage) {
+        
+            // default to system icon when cannot make image
+        
+        UIDocumentInteractionController *documentInteractionController = [UIDocumentInteractionController interactionControllerWithURL: self.assetURL];
+        NSArray *systemIconImages = documentInteractionController.icons;
+        
+        newImage = [systemIconImages firstObject];
+    }
+    
+    // scale it
+    
+        //UIGraphicsBeginImageContext(newSize);
+        // In next line, pass 0.0 to use the current device's pixel scaling factor (and thus account for Retina resolution).
+        // Pass 1.0 to force exact pixel size.
+    UIGraphicsBeginImageContextWithOptions(self.targetImageSize, NO, 0.0);
+    [newImage drawInRect:CGRectMake(
+                                    0,
+                                    0,
+                                    self.targetImageSize.width,
+                                    self.targetImageSize.height)
+     ];
+    
+    newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    self.image = newImage;
+    
 }
 
 

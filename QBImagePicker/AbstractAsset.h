@@ -40,12 +40,10 @@
     // used to identify the asset before downloading is complete
 @property (readwrite) NSString *identifier;
 
-
+@property (readwrite) NSURL *assetURL;
+@property (nonatomic) CGSize targetImageSize;
 @property (readwrite) UIImage *image;
 
-
-    // will generate a new image
-@property (nonatomic, readwrite) NSURL *assetURL;
 
 @property (readwrite) BOOL isImageFile;
 @property (readwrite) BOOL isVideoFile;
@@ -53,5 +51,8 @@
 
 + (BOOL)isImageAsset: (NSURL *)inAssetURL;
 + (BOOL)isMovieAsset: (NSURL *)inAssetURL;
+
+- (void)updateImageCache;
+
 
 @end

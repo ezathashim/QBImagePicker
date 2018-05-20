@@ -37,15 +37,19 @@
     NSURL *image1 = [[NSBundle mainBundle] URLForResource:@"image1" withExtension:@"jpg"];
     AbstractAsset *asset1 = [[AbstractAsset alloc] init];
     asset1.assetURL = image1;
+    [asset1 updateImageCache];
+
     
     NSURL *image2 = [[NSBundle mainBundle] URLForResource:@"image2" withExtension:@"jpg"];
     AbstractAsset *asset2 = [[AbstractAsset alloc] init];
     asset2.assetURL = image2;
+    [asset2 updateImageCache];
     
     NSURL *image3 = [[NSBundle mainBundle] URLForResource:@"image3" withExtension:@"jpg"];
     AbstractAsset *asset3 = [[AbstractAsset alloc] init];
     asset3.assetURL = image3;
-    
+    [asset3 updateImageCache];
+
     [array addObject: asset1];
     [array addObject: asset2];
     [array addObject: asset3];

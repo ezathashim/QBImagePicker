@@ -63,6 +63,7 @@ typedef NS_ENUM(NSUInteger, QBImagePickerMediaType) {
 
 
     // will only accept AbstractAsset and subclasses
+@property NSString *abstractAssetArrayTitle;
 @property (nonatomic, strong) NSMutableArray *abstractAssetArray;
 
 
