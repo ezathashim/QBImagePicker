@@ -32,6 +32,8 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
 
 @property (nonatomic, copy) NSArray *fetchResults;
 @property (nonatomic, copy) NSArray *assetCollections;
+@property (nonatomic, copy) NSMutableArray *abstractAssetsArray;
+
 
 @end
 
@@ -84,9 +86,13 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    id assetCollection = self.assetCollections[self.tableView.indexPathForSelectedRow.row];
+    NSInteger section = indexPath.section;
     
-    if ([assetCollection isKindOfClass: [PHAssetCollection class]]) {
+    if (section == 0) {
+        
+            // PHAssetCollection section
+
+        PHAssetCollection *assetCollection = self.assetCollections[indexPath.row];
         
         QBAssetsViewController *assetsViewController = [self.storyboard instantiateViewControllerWithIdentifier: @"QBAssetsViewController"];
         
@@ -100,19 +106,22 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
         
     }
     
-    if ([assetCollection isKindOfClass: [NSArray class]]) {
+    
+    if (section == 1) {
         
-            // a bunch if AbstractAsset objects
+            // AbstractAssets section
+        
         NPAssetsViewController *assetsViewController = [self.storyboard instantiateViewControllerWithIdentifier: @"NPAssetsViewController"];
         
         assetsViewController.imagePickerController = self.imagePickerController;
         
-        assetsViewController.abstractAssetsArray = assetCollection;
+        assetsViewController.abstractAssetsArray = self.abstractAssetsArray;
         
         [self.navigationController pushViewController: assetsViewController
                                              animated: YES];
         
         return;
+        
     }
     
 }
@@ -121,22 +130,30 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
 - (void)prepareForSegue: (UIStoryboardSegue *)segue
                  sender: (id)sender
 {
-    id assetCollection = self.assetCollections[self.tableView.indexPathForSelectedRow.row];
     
-    if ([assetCollection isKindOfClass: [PHAssetCollection class]]) {
+    NSIndexPath *indexPath = self.tableView.indexPathForSelectedRow;
+    NSInteger section = indexPath.section;
+    
+    if (section == 0) {
+        
+            // PHAssetCollection
+        
+        PHAssetCollection *assetCollection = self.assetCollections[indexPath.row];
         
         QBAssetsViewController *assetsViewController = segue.destinationViewController;
         assetsViewController.imagePickerController = self.imagePickerController;
         assetsViewController.assetCollection = assetCollection;
     }
     
-    if ([assetCollection isKindOfClass: [NSArray class]]) {
+    
+    if (section == 1) {
         
-            // a bunch if URLs
+            // AbstractAssetArray
+
         NPAssetsViewController *assetsViewController = segue.destinationViewController;
         assetsViewController.imagePickerController = self.imagePickerController;
         
-        assetsViewController.abstractAssetsArray = assetCollection;
+        assetsViewController.abstractAssetsArray = self.abstractAssetsArray;
     }
     
     
@@ -241,9 +258,12 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
     }];
     
     
-    // add AbstractAssets assets
+    
+        // add AbstractAssets assets
     if (self.imagePickerController.abstractAssetArray.lastObject) {
-        [assetCollections addObject: self.imagePickerController.abstractAssetArray];
+        self.abstractAssetsArray = self.imagePickerController.abstractAssetArray;
+    } else {
+        self.abstractAssetsArray = nil;
     }
     
     
@@ -325,17 +345,31 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+    if (self.abstractAssetsArray.lastObject) {
+        return 2;
+    }
+    
     return 1;
 }
 
 
 - (nullable NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return @"";
+    
+    if (section == 1) {
+        return self.imagePickerController.abstractAssetsSectionTitle;
+    }
+    
+    
+    return self.imagePickerController.phAssetsSectionTitle;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if (section == 1) {
+        return 1;
+    }
+    
     return self.assetCollections.count;
 }
 
@@ -348,12 +382,14 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
     
     // Thumbnail
     
-    // get assetCollection
-    id collectionObj = self.assetCollections[indexPath.row];
+    NSUInteger section = indexPath.section;
     
-    if ([collectionObj isKindOfClass: [PHAssetCollection class]]) {
+    
+    if (section == 0) {
         
-        PHAssetCollection *assetCollection = (PHAssetCollection *)collectionObj;
+            // PHAssetCollection section
+        
+        PHAssetCollection *assetCollection = self.assetCollections[indexPath.row];
         
         PHFetchOptions *options = [PHFetchOptions new];
         
@@ -438,16 +474,17 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
     }
     
     
-    if ([collectionObj isKindOfClass: [NSArray class]]) {
+    if (section == 1) {
         
-            // is a bunch of AbstractAsset objects
-        NSArray *abstractAssetsArray = (NSArray *)collectionObj;
+            // AbstractAssetArray
+        
+        NSUInteger abstractAssetsCnt = self.abstractAssetsArray.count;
         
             // use images
-        if (abstractAssetsArray.count >= 3) {
+        if (abstractAssetsCnt >= 3) {
             cell.imageView3.hidden = NO;
             
-            AbstractAsset *asset = [abstractAssetsArray objectAtIndex: (abstractAssetsArray.count - 3)];
+            AbstractAsset *asset = [self.abstractAssetsArray objectAtIndex: (abstractAssetsCnt - 3)];
             asset.targetImageSize = cell.imageView3.frame.size;
 
             UIImage *image = asset.image;
@@ -463,10 +500,10 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
         
         
         
-        if (abstractAssetsArray.count >= 2) {
+        if (abstractAssetsCnt >= 2) {
             cell.imageView3.hidden = NO;
             
-            AbstractAsset *asset = [abstractAssetsArray objectAtIndex: (abstractAssetsArray.count - 2)];
+            AbstractAsset *asset = [self.abstractAssetsArray objectAtIndex: (abstractAssetsCnt - 2)];
             asset.targetImageSize = cell.imageView2.frame.size;
 
             UIImage *image = asset.image;
@@ -479,10 +516,10 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
             cell.imageView2.hidden = YES;
         }
         
-        if (abstractAssetsArray.count >= 1) {
+        if (abstractAssetsCnt >= 1) {
             cell.imageView3.hidden = NO;
             
-            AbstractAsset *asset = [abstractAssetsArray objectAtIndex: (abstractAssetsArray.count - 1)];
+            AbstractAsset *asset = [self.abstractAssetsArray objectAtIndex: (abstractAssetsCnt - 1)];
             asset.targetImageSize = cell.imageView1.frame.size;
 
             
@@ -498,7 +535,7 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
         }
         
         
-        if (abstractAssetsArray.count == 0) {
+        if (abstractAssetsCnt == 0) {
             cell.imageView3.hidden = NO;
             cell.imageView2.hidden = NO;
             
@@ -514,7 +551,7 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
         cell.titleLabel.text = self.imagePickerController.abstractAssetArrayTitle;
         
             // Number of photos
-        cell.countLabel.text = [NSString stringWithFormat:@"%lu", (long)abstractAssetsArray.count];
+        cell.countLabel.text = [NSString stringWithFormat:@"%lu", (long)abstractAssetsCnt];
         
     }
     

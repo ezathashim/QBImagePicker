@@ -31,6 +31,8 @@
     imagePickerController.allowsMultipleSelection = (indexPath.section == 1);
     imagePickerController.showsNumberOfSelectedAssets = YES;
     
+    imagePickerController.phAssetsSectionTitle = @"Photos";
+    imagePickerController.abstractAssetsSectionTitle = @"Abstract Assets";
     
         // load image files at URL
     NSMutableArray *array = [NSMutableArray array];
