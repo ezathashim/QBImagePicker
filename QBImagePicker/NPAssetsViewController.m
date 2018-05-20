@@ -13,6 +13,9 @@
 #import "AbstractAssetCell.h"
 #import "QBVideoIndicatorView.h"
 
+static CGSize CGSizeScale(CGSize size, CGFloat scale) {
+    return CGSizeMake(size.width * scale, size.height * scale);
+}
 
 @interface QBImagePickerController (Private)
 
@@ -147,7 +150,6 @@
 
 - (void)dealloc
 {
-    // add stuff here
     
     // set delegate to not self
     for (id obj in self.abstractAssetsArray){
@@ -168,36 +170,11 @@
 
 - (void)setAbstractAssetsArray:(NSMutableArray *)abstractAssetsArray
 {
-    
-        // remove delegate from existing array
-    
-    for (id obj in _abstractAssetsArray){
-        if ([obj isKindOfClass: [AbstractAsset class]]) {
-            AbstractAsset *asset = (AbstractAsset *)obj;
-            if (asset.delegate == self) {
-                asset.delegate = nil;
-            }
-        }
-    }
-    
     _abstractAssetsArray = abstractAssetsArray;
     
-    
-        // reload before setting the delegate
-        // will prevent updating the cells before its time
     [self.collectionView reloadData];
     
-    
-        // set the delegate
-    for (id obj in _abstractAssetsArray){
-        if ([obj isKindOfClass: [AbstractAsset class]]) {
-            AbstractAsset *asset = (AbstractAsset *)obj;
-            asset.delegate = self;
-        }
-    }
-    
-        // reload after setting the delegate
-    [self.collectionView reloadData];
+    [self updateCachedAssets];
     
 }
 
@@ -207,14 +184,13 @@
         // see if part of the array
     NSUInteger index = [self.abstractAssetsArray indexOfObject: sender];
     if (index == NSNotFound) {
-            // set the delegate to nil
-        sender.delegate = nil;
         return;
     }
     
         // update the cell
     NSIndexPath *indexPath = [NSIndexPath indexPathForItem: index
                                                  inSection: 0];
+    
     [self.collectionView reloadItemsAtIndexPaths: [NSArray arrayWithObject: indexPath]];
     
     
@@ -374,15 +350,15 @@
     BOOL isViewVisible = [self isViewLoaded] && self.view.window != nil;
     if (!isViewVisible) { return; }
     
-    // The preheat window is twice the height of the visible rect
+        // The preheat window is twice the height of the visible rect
     CGRect preheatRect = self.collectionView.bounds;
     preheatRect = CGRectInset(preheatRect, 0.0, -0.5 * CGRectGetHeight(preheatRect));
     
-    // If scrolled by a "reasonable" amount...
+        // If scrolled by a "reasonable" amount...
     CGFloat delta = ABS(CGRectGetMidY(preheatRect) - CGRectGetMidY(self.previousPreheatRect));
     
     if (delta > CGRectGetHeight(self.collectionView.bounds) / 3.0) {
-        // Compute the assets to start caching and to stop caching
+            // Compute the assets to start caching and to stop caching
         NSMutableArray *addedIndexPaths = [NSMutableArray array];
         NSMutableArray *removedIndexPaths = [NSMutableArray array];
         
@@ -394,6 +370,14 @@
             [removedIndexPaths addObjectsFromArray:indexPaths];
         }];
         
+        NSArray *assetsToStartCaching = [self assetsAtIndexPaths:addedIndexPaths];
+        
+        CGSize itemSize = [(UICollectionViewFlowLayout *)self.collectionViewLayout itemSize];
+        CGSize targetSize = CGSizeScale(itemSize, [[UIScreen mainScreen] scale]);
+        
+        for (AbstractAsset *asset in assetsToStartCaching){
+            asset.targetImageSize = targetSize;
+        }
         
         self.previousPreheatRect = preheatRect;
     }

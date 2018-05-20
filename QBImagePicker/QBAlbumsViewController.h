@@ -8,9 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+#import "NPAssetsViewController.h"
+
 @class QBImagePickerController;
 
-@interface QBAlbumsViewController : UITableViewController
+@interface QBAlbumsViewController : UITableViewController <AbstractAssetDelegate>
 
 @property (nonatomic, weak) QBImagePickerController *imagePickerController;
 

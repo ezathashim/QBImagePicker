@@ -12,8 +12,10 @@
 
 // ViewControllers
 #import "QBAlbumsViewController.h"
+#import "NPAssetsViewController.h"
 
-@interface QBImagePickerController ()
+
+@interface QBImagePickerController () <AbstractAssetDelegate>
 
 @property (nonatomic, strong) UINavigationController *albumsNavigationController;
 
@@ -66,6 +68,9 @@
     
     for (id obj in abstractAssetArray){
         if ([obj isKindOfClass: [AbstractAsset class]]) {
+            AbstractAsset *asset = (AbstractAsset *)obj;
+            asset.delegate = self;
+            
             [array addObject: obj];
         }
     }
@@ -90,6 +95,38 @@
     [navigationController didMoveToParentViewController:self];
     
     self.albumsNavigationController = navigationController;
+}
+
+
+#pragma mark AbstractAssetDelegate
+
+- (void)assetDidUpdate: (AbstractAsset *)sender\
+{
+    NSArray *viewControllers = self.albumsNavigationController.viewControllers;
+    
+    for (UIViewController *viewController in viewControllers){
+        
+        if ([viewController isKindOfClass:[QBAlbumsViewController class]]){
+            
+            QBAlbumsViewController *controller = (QBAlbumsViewController *)viewController;
+            
+            if ([controller respondsToSelector: @selector(assetDidUpdate:)]){
+                [controller assetDidUpdate: sender];
+            }
+            
+        }
+        
+        if ([viewController isKindOfClass:[NPAssetsViewController class]]){
+            
+            NPAssetsViewController *controller = (NPAssetsViewController *)viewController;
+            
+            if ([controller respondsToSelector: @selector(assetDidUpdate:)]){
+                [controller assetDidUpdate: sender];
+            }
+            
+        
+        }
+    }
 }
 
 @end

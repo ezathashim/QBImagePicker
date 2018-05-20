@@ -15,7 +15,6 @@
 // ViewControllers
 #import "QBImagePickerController.h"
 #import "QBAssetsViewController.h"
-#import "NPAssetsViewController.h"
 
 static CGSize CGSizeScale(CGSize size, CGFloat scale) {
     return CGSizeMake(size.width * scale, size.height * scale);
@@ -321,6 +320,7 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
 }
 
 
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -448,7 +448,14 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
             cell.imageView3.hidden = NO;
             
             AbstractAsset *asset = [abstractAssetsArray objectAtIndex: (abstractAssetsArray.count - 3)];
-            cell.imageView3.image = asset.image;
+            asset.targetImageSize = cell.imageView3.frame.size;
+
+            UIImage *image = asset.image;
+            if (!image) {
+                image = [self placeholderImageWithSize:cell.imageView3.frame.size];
+                
+            }
+            cell.imageView3.image = image;
             
         } else {
             cell.imageView3.hidden = YES;
@@ -460,7 +467,13 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
             cell.imageView3.hidden = NO;
             
             AbstractAsset *asset = [abstractAssetsArray objectAtIndex: (abstractAssetsArray.count - 2)];
-            cell.imageView2.image = asset.image;
+            asset.targetImageSize = cell.imageView2.frame.size;
+
+            UIImage *image = asset.image;
+            if (!image) {
+                image = [self placeholderImageWithSize:cell.imageView2.frame.size];
+            }
+            cell.imageView2.image = image;
             
         } else {
             cell.imageView2.hidden = YES;
@@ -470,7 +483,15 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
             cell.imageView3.hidden = NO;
             
             AbstractAsset *asset = [abstractAssetsArray objectAtIndex: (abstractAssetsArray.count - 1)];
-            cell.imageView1.image = asset.image;
+            asset.targetImageSize = cell.imageView1.frame.size;
+
+            
+            UIImage *image = asset.image;
+            if (!image) {
+                image = [self placeholderImageWithSize:cell.imageView1.frame.size];
+            }
+            
+            cell.imageView1.image = image;
             
         } else {
             cell.imageView1.hidden = YES;
@@ -529,5 +550,15 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
         }
     });
 }
+
+
+
+#pragma mark AbstractAsset delegate
+
+- (void)assetDidUpdate:(AbstractAsset *)sender
+{
+    [self.tableView reloadData];
+}
+
 
 @end
