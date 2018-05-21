@@ -44,6 +44,9 @@
 @property (nonatomic) CGSize targetImageSize;
 @property (nonatomic, readwrite) UIImage *image;
 
+    // if NO, then will scale to fit
+@property BOOL scaleToFill;
+
 
 @property (readwrite) BOOL isImageFile;
 @property (readwrite) BOOL isVideoFile;
