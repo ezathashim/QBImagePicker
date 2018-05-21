@@ -31,8 +31,11 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
 @property (nonatomic, strong) IBOutlet UIBarButtonItem *doneButton;
 
 @property (nonatomic, copy) NSArray *fetchResults;
-@property (nonatomic, copy) NSArray *assetCollections;
+@property (nonatomic, copy) NSArray *phAssetCollections;
 @property (nonatomic, copy) NSMutableArray *abstractAssetsArray;
+
+    // will hold phAssetCollections and abstractAssetsArray
+@property NSMutableArray *assetSectionsArray;
 
 
 @end
@@ -50,7 +53,7 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
     PHFetchResult *userAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum subtype:PHAssetCollectionSubtypeAny options:nil];
     self.fetchResults = @[smartAlbums, userAlbums];
     
-    [self updateAssetCollections];
+    [self updateAssetData];
     
     // Register observer
     [[PHPhotoLibrary sharedPhotoLibrary] registerChangeObserver:self];
@@ -87,12 +90,13 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSInteger section = indexPath.section;
+    id sectionObj = [self.assetSectionsArray objectAtIndex: section];
     
-    if (section == 0) {
+    if (sectionObj == self.phAssetCollections) {
         
             // PHAssetCollection section
 
-        PHAssetCollection *assetCollection = self.assetCollections[indexPath.row];
+        PHAssetCollection *assetCollection = self.phAssetCollections[indexPath.row];
         
         QBAssetsViewController *assetsViewController = [self.storyboard instantiateViewControllerWithIdentifier: @"QBAssetsViewController"];
         
@@ -107,7 +111,7 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
     }
     
     
-    if (section == 1) {
+    if (sectionObj == self.abstractAssetsArray) {
         
             // AbstractAssets section
         
@@ -133,12 +137,13 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
     
     NSIndexPath *indexPath = self.tableView.indexPathForSelectedRow;
     NSInteger section = indexPath.section;
+    id sectionObj = [self.assetSectionsArray objectAtIndex: section];
     
-    if (section == 0) {
+    if (sectionObj == self.phAssetCollections) {
         
             // PHAssetCollection
         
-        PHAssetCollection *assetCollection = self.assetCollections[indexPath.row];
+        PHAssetCollection *assetCollection = self.phAssetCollections[indexPath.row];
         
         QBAssetsViewController *assetsViewController = segue.destinationViewController;
         assetsViewController.imagePickerController = self.imagePickerController;
@@ -146,7 +151,7 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
     }
     
     
-    if (section == 1) {
+    if (sectionObj == self.abstractAssetsArray) {
         
             // AbstractAssetArray
 
@@ -217,9 +222,9 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
 }
 
 
-#pragma mark - Fetching Asset Collections
+#pragma mark - Fetching Asset Collections and AbstractAssets
 
-- (void)updateAssetCollections
+- (void)updateAssetData
 {
     // Filter albums
     NSArray *assetCollectionSubtypes = self.imagePickerController.assetCollectionSubtypes;
@@ -258,16 +263,23 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
     }];
     
     
+    self.phAssetCollections = assetCollections;
     
-        // add AbstractAssets assets
-    if (self.imagePickerController.abstractAssetArray.lastObject) {
-        self.abstractAssetsArray = self.imagePickerController.abstractAssetArray;
-    } else {
-        self.abstractAssetsArray = nil;
+    
+        // update AbstractAssets
+    self.abstractAssetsArray = self.imagePickerController.abstractAssetArray;
+    
+    
+        // put in sections array
+    self.assetSectionsArray = [NSMutableArray array];
+    
+    if (self.phAssetCollections) {
+        [self.assetSectionsArray addObject: self.phAssetCollections];
+    }
+    if (self.abstractAssetsArray.lastObject) {
+        [self.assetSectionsArray addObject: self.abstractAssetsArray];
     }
     
-    
-    self.assetCollections = assetCollections;
 }
 
 - (UIImage *)placeholderImageWithSize:(CGSize)size
@@ -345,8 +357,8 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if (self.abstractAssetsArray.lastObject) {
-        return 2;
+    if (self.assetSectionsArray.lastObject) {
+        return self.assetSectionsArray.count;
     }
     
     return 1;
@@ -355,22 +367,42 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
 
 - (nullable NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
+    if (!self.assetSectionsArray.lastObject) {
+        return @"";
+    }
     
-    if (section == 1) {
+    id sectionObj = [self.assetSectionsArray objectAtIndex: section];
+    
+    if (sectionObj == self.phAssetCollections) {
+        return self.imagePickerController.phAssetsSectionTitle;
+    }
+    
+    if (sectionObj == self.abstractAssetsArray) {
         return self.imagePickerController.abstractAssetsSectionTitle;
     }
     
+    return @"";
     
-    return self.imagePickerController.phAssetsSectionTitle;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == 1) {
+    if (!self.assetSectionsArray.lastObject) {
+        return 0;
+    }
+    
+    id sectionObj = [self.assetSectionsArray objectAtIndex: section];
+    
+    if (sectionObj == self.phAssetCollections) {
+        return self.phAssetCollections.count;
+    }
+    
+    if (sectionObj == self.abstractAssetsArray) {
         return 1;
     }
     
-    return self.assetCollections.count;
+    return 0;
+    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -383,13 +415,14 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
     // Thumbnail
     
     NSUInteger section = indexPath.section;
+    id sectionObj = [self.assetSectionsArray objectAtIndex: section];
     
     
-    if (section == 0) {
-        
+    if (sectionObj == self.phAssetCollections) {
+
             // PHAssetCollection section
         
-        PHAssetCollection *assetCollection = self.assetCollections[indexPath.row];
+        PHAssetCollection *assetCollection = self.phAssetCollections[indexPath.row];
         
         PHFetchOptions *options = [PHFetchOptions new];
         
@@ -474,8 +507,8 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
     }
     
     
-    if (section == 1) {
-        
+    if (sectionObj == self.abstractAssetsArray) {
+
             // AbstractAssetArray
         
         NSUInteger abstractAssetsCnt = self.abstractAssetsArray.count;
@@ -582,7 +615,7 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
             self.fetchResults = fetchResults;
             
             // Reload albums
-            [self updateAssetCollections];
+            [self updateAssetData];
             [self.tableView reloadData];
         }
     });
@@ -594,6 +627,7 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
 
 - (void)assetDidUpdate:(AbstractAsset *)sender
 {
+    [self updateAssetData];
     [self.tableView reloadData];
 }
 
