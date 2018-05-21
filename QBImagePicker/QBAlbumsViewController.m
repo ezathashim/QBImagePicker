@@ -273,11 +273,13 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
         // put in sections array
     self.assetSectionsArray = [NSMutableArray array];
     
-    if (self.phAssetCollections) {
-        [self.assetSectionsArray addObject: self.phAssetCollections];
-    }
+    // put abstract assets first since phot library can have multiple collections
     if (self.abstractAssetsArray.lastObject) {
         [self.assetSectionsArray addObject: self.abstractAssetsArray];
+    }
+    
+    if (self.phAssetCollections) {
+        [self.assetSectionsArray addObject: self.phAssetCollections];
     }
     
 }

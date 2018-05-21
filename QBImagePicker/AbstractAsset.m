@@ -41,8 +41,6 @@
         
         _targetImageSize = CGSizeMake(100, 100);
         
-        _scaleToFill = NO;
-        
         _image = [QBAlbumsViewController placeholderImageWithSize: _targetImageSize];
         
         
@@ -96,12 +94,14 @@
         // https://gist.github.com/tomasbasham/10533743
         // switch MIN to MAX for FILL instead of FIT
     
+    BOOL scaleToFill = YES;
+    
     CGRect scaledImageRect = CGRectZero;
     
     CGFloat aspectWidth = self.targetImageSize.width / newImage.size.width;
     CGFloat aspectHeight = self.targetImageSize.height / newImage.size.height;
     CGFloat aspectRatio = MIN ( aspectWidth, aspectHeight );
-    if (self.scaleToFill) {
+    if (scaleToFill) {
         aspectRatio = MAX ( aspectWidth, aspectHeight );
     }
     
