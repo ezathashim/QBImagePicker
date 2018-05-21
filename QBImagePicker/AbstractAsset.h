@@ -42,7 +42,7 @@
 
 @property (readwrite) NSURL *assetURL;
 @property (nonatomic) CGSize targetImageSize;
-@property (readwrite) UIImage *image;
+@property (nonatomic, readwrite) UIImage *image;
 
 
 @property (readwrite) BOOL isImageFile;

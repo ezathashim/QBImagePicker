@@ -8,6 +8,8 @@
 
 #import "AbstractAsset.h"
 
+#import "QBAlbumsViewController.h"
+
 @import MobileCoreServices;
 
 
@@ -39,6 +41,9 @@
         
         _targetImageSize = CGSizeMake(100, 100);
         
+        _image = [QBAlbumsViewController placeholderImageWithSize: _targetImageSize];
+        
+        
     }
     
     
@@ -55,6 +60,15 @@
 }
 
 
+- (void)setImage:(UIImage *)image
+{
+    if (!image) {
+        image = [QBAlbumsViewController placeholderImageWithSize: self.targetImageSize];
+    }
+    
+    _image = image;
+    
+}
 
 - (void)updateImageCache
 {
@@ -75,23 +89,26 @@
         newImage = [systemIconImages firstObject];
     }
     
-    // scale it
     
-        //UIGraphicsBeginImageContext(newSize);
-        // In next line, pass 0.0 to use the current device's pixel scaling factor (and thus account for Retina resolution).
-        // Pass 1.0 to force exact pixel size.
-    UIGraphicsBeginImageContextWithOptions(self.targetImageSize, NO, 0.0);
-    [newImage drawInRect:CGRectMake(
-                                    0,
-                                    0,
-                                    self.targetImageSize.width,
-                                    self.targetImageSize.height)
-     ];
+        // scale it
     
-    newImage = UIGraphicsGetImageFromCurrentImageContext();
+    CGRect scaledImageRect = CGRectZero;
+    
+    CGFloat aspectWidth = self.targetImageSize.width / newImage.size.width;
+    CGFloat aspectHeight = self.targetImageSize.height / newImage.size.height;
+    CGFloat aspectRatio = MIN ( aspectWidth, aspectHeight );
+    
+    scaledImageRect.size.width = newImage.size.width * aspectRatio;
+    scaledImageRect.size.height = newImage.size.height * aspectRatio;
+    scaledImageRect.origin.x = (self.targetImageSize.width - scaledImageRect.size.width) / 2.0f;
+    scaledImageRect.origin.y = (self.targetImageSize.height - scaledImageRect.size.height) / 2.0f;
+    
+    UIGraphicsBeginImageContextWithOptions( self.targetImageSize, NO, 0 );
+    [newImage drawInRect:scaledImageRect];
+    UIImage *scaledImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
-    self.image = newImage;
+    self.image = scaledImage;
     
 }
 
