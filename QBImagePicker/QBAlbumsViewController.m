@@ -282,7 +282,7 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
     
 }
 
-- (UIImage *)placeholderImageWithSize:(CGSize)size
++ (UIImage *)placeholderImageWithSize:(CGSize)size
 {
     UIGraphicsBeginImageContext(size);
     CGContextRef context = UIGraphicsGetCurrentContext();
@@ -491,7 +491,7 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
             cell.imageView2.hidden = NO;
             
                 // Set placeholder image
-            UIImage *placeholderImage = [self placeholderImageWithSize:cell.imageView1.frame.size];
+            UIImage *placeholderImage = [[self class] placeholderImageWithSize:cell.imageView1.frame.size];
             cell.imageView1.image = placeholderImage;
             cell.imageView2.image = placeholderImage;
             cell.imageView3.image = placeholderImage;
@@ -522,7 +522,7 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
 
             UIImage *image = asset.image;
             if (!image) {
-                image = [self placeholderImageWithSize:cell.imageView3.frame.size];
+                image = [[self class] placeholderImageWithSize:cell.imageView3.frame.size];
                 
             }
             cell.imageView3.image = image;
@@ -541,7 +541,7 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
 
             UIImage *image = asset.image;
             if (!image) {
-                image = [self placeholderImageWithSize:cell.imageView2.frame.size];
+                image = [[self class] placeholderImageWithSize:cell.imageView2.frame.size];
             }
             cell.imageView2.image = image;
             
@@ -558,7 +558,7 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
             
             UIImage *image = asset.image;
             if (!image) {
-                image = [self placeholderImageWithSize:cell.imageView1.frame.size];
+                image = [[self class] placeholderImageWithSize:cell.imageView1.frame.size];
             }
             
             cell.imageView1.image = image;
@@ -573,7 +573,7 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
             cell.imageView2.hidden = NO;
             
                 // Set placeholder image
-            UIImage *placeholderImage = [self placeholderImageWithSize:cell.imageView1.frame.size];
+            UIImage *placeholderImage = [[self class] placeholderImageWithSize:cell.imageView1.frame.size];
             cell.imageView1.image = placeholderImage;
             cell.imageView2.image = placeholderImage;
             cell.imageView3.image = placeholderImage;

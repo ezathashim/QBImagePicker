@@ -16,4 +16,8 @@
 
 @property (nonatomic, weak) QBImagePickerController *imagePickerController;
 
+
++ (UIImage *)placeholderImageWithSize:(CGSize)size;
+
+
 @end
